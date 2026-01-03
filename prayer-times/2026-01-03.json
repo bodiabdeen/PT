@@ -1,0 +1,49 @@
+{
+  "date": "2026-01-03",
+  "gregorianDate": "Saturday, 03 January 2026",
+  "hijriDate": "14 Rajab 1447 AH",
+  "prayers": [
+    {
+      "name": "Fajr",
+      "nameAr": "الفجر",
+      "apt": "06:21",
+      "adhan": "06:21",
+      "iqama": "07:00"
+    },
+    {
+      "name": "Sunrise",
+      "nameAr": "الشروق",
+      "apt": "08:37",
+      "adhan": null,
+      "iqama": null
+    },
+    {
+      "name": "Dhuhr",
+      "nameAr": "الظهر",
+      "apt": "12:22",
+      "adhan": "12:30",
+      "iqama": "12:45"
+    },
+    {
+      "name": "Asr",
+      "nameAr": "العصر",
+      "apt": "13:51",
+      "adhan": "14:30",
+      "iqama": "14:45"
+    },
+    {
+      "name": "Maghrib",
+      "nameAr": "المغرب",
+      "apt": "16:08",
+      "adhan": "16:08",
+      "iqama": "16:13"
+    },
+    {
+      "name": "Isha",
+      "nameAr": "العشاء",
+      "apt": "17:38",
+      "adhan": "17:50",
+      "iqama": "18:00"
+    }
+  ]
+}
