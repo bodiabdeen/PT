@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOM Prayer Times - Simple Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a2f35 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #0a2f35;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .date-selector {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .date-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .date-selector input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 200px;
+        }
+        
+        .prayer-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .prayer-section h3 {
+            color: #0a2f35;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .prayer-ar {
+            color: #00ff88;
+        }
+        
+        .apt-info {
+            background: #e8f5ff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+        
+        .times-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .time-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .time-field label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .time-field input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #00ff88;
+            color: #0a2f35;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .btn-primary:hover {
+            background: #00dd77;
+        }
+        
+        .output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #00ff88;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .alert {
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕌 IOM Prayer Times - Simple Admin</h1>
+        <p class="subtitle">Edit prayer times and copy the JSON to update your apps</p>
+        
+        <div class="alert alert-info">
+            <strong>How it works:</strong> Enter times below, click Generate JSON, copy the output, and paste it into your GitHub repository.
+        </div>
+        
+        <div class="date-selector">
+            <label for="dateInput">Select Date:</label>
+            <input type="date" id="dateInput">
+            <button class="btn btn-primary" onclick="loadDate()" style="width: auto; margin-top: 10px; margin-left: 10px;">Load APT</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading prayer times from Aladhan...</p>
+        </div>
+        
+        <div id="form" style="display: none;">
+            <!-- Fajr -->
+            <div class="prayer-section">
+                <h3><span>Fajr</span><span class="prayer-ar">الفجر</span></h3>
+                <div class="apt-info" id="fajrApt">APT: --:--</div>
+                <div class="times-grid">
+                    <div class="time-field">
+                        <label>Adhan Time</label>
+                        <input type="time" id="fajrAdhan">
+                    </div>
+                    <div class="time-field">
+                        <label>Iqama Time *</label>
+                        <input type="time" id="fajrIqama" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dhuhr -->
+            <div class="prayer-section">
+                <h3><span>Dhuhr</span><span class="prayer-ar">الظهر</span></h3>
+                <div class="apt-info" id="dhuhrApt">APT: --:--</div>
+                <div class="times-grid">
+                    <div class="time-field">
+                        <label>Adhan Time</label>
+                        <input type="time" id="dhuhrAdhan">
+                    </div>
+                    <div class="time-field">
+                        <label>Iqama Time *</label>
+                        <input type="time" id="dhuhrIqama" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Asr -->
+            <div class="prayer-section">
+                <h3><span>Asr</span><span class="prayer-ar">العصر</span></h3>
+                <div class="apt-info" id="asrApt">APT: --:--</div>
+                <div class="times-grid">
+                    <div class="time-field">
+                        <label>Adhan Time</label>
+                        <input type="time" id="asrAdhan">
+                    </div>
+                    <div class="time-field">
+                        <label>Iqama Time *</label>
+                        <input type="time" id="asrIqama" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Maghrib -->
+            <div class="prayer-section">
+                <h3><span>Maghrib</span><span class="prayer-ar">المغرب</span></h3>
+                <div class="apt-info" id="maghribApt">APT: --:--</div>
+                <div class="times-grid">
+                    <div class="time-field">
+                        <label>Adhan Time</label>
+                        <input type="time" id="maghribAdhan">
+                    </div>
+                    <div class="time-field">
+                        <label>Iqama Time *</label>
+                        <input type="time" id="maghribIqama" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Isha -->
+            <div class="prayer-section">
+                <h3><span>Isha</span><span class="prayer-ar">العشاء</span></h3>
+                <div class="apt-info" id="ishaApt">APT: --:--</div>
+                <div class="times-grid">
+                    <div class="time-field">
+                        <label>Adhan Time</label>
+                        <input type="time" id="ishaAdhan">
+                    </div>
+                    <div class="time-field">
+                        <label>Iqama Time *</label>
+                        <input type="time" id="ishaIqama" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="generateJSON()">Generate JSON</button>
+            
+            <div id="output" class="output" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let aptData = null;
+        
+        // Set today as default
+        document.getElementById('dateInput').valueAsDate = new Date();
+        
+        async function loadDate() {
+            const dateInput = document.getElementById('dateInput').value;
+            if (!dateInput) {
+                alert('Please select a date');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('form').style.display = 'none';
+            
+            try {
+                const [year, month, day] = dateInput.split('-');
+                const aladhanDate = `${day}-${month}-${year}`;
+                
+                const url = `https://api.aladhan.com/v1/timings/${aladhanDate}`;
+                const params = new URLSearchParams({
+                    latitude: '54.15',
+                    longitude: '-4.48',
+                    method: '4',
+                    timezonestring: 'Europe/Isle_of_Man'
+                });
+                
+                const response = await fetch(`${url}?${params}`);
+                const data = await response.json();
+                aptData = data.data;
+                
+                // Display APT
+                document.getElementById('fajrApt').textContent = `APT: ${aptData.timings.Fajr}`;
+                document.getElementById('dhuhrApt').textContent = `APT: ${aptData.timings.Dhuhr}`;
+                document.getElementById('asrApt').textContent = `APT: ${aptData.timings.Asr}`;
+                document.getElementById('maghribApt').textContent = `APT: ${aptData.timings.Maghrib}`;
+                document.getElementById('ishaApt').textContent = `APT: ${aptData.timings.Isha}`;
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('form').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load prayer times. Please try again.');
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        function generateJSON() {
+            if (!aptData) {
+                alert('Please load a date first');
+                return;
+            }
+            
+            const dateInput = document.getElementById('dateInput').value;
+            
+            const data = {
+                date: dateInput,
+                gregorianDate: aptData.date.readable,
+                hijriDate: `${aptData.date.hijri.day} ${aptData.date.hijri.month.en} ${aptData.date.hijri.year} AH`,
+                prayers: [
+                    {
+                        name: "Fajr",
+                        nameAr: "الفجر",
+                        apt: aptData.timings.Fajr,
+                        adhan: document.getElementById('fajrAdhan').value || null,
+                        iqama: document.getElementById('fajrIqama').value || null
+                    },
+                    {
+                        name: "Sunrise",
+                        nameAr: "الشروق",
+                        apt: aptData.timings.Sunrise,
+                        adhan: null,
+                        iqama: null
+                    },
+                    {
+                        name: "Dhuhr",
+                        nameAr: "الظهر",
+                        apt: aptData.timings.Dhuhr,
+                        adhan: document.getElementById('dhuhrAdhan').value || null,
+                        iqama: document.getElementById('dhuhrIqama').value || null
+                    },
+                    {
+                        name: "Asr",
+                        nameAr: "العصر",
+                        apt: aptData.timings.Asr,
+                        adhan: document.getElementById('asrAdhan').value || null,
+                        iqama: document.getElementById('asrIqama').value || null
+                    },
+                    {
+                        name: "Maghrib",
+                        nameAr: "المغرب",
+                        apt: aptData.timings.Maghrib,
+                        adhan: document.getElementById('maghribAdhan').value || null,
+                        iqama: document.getElementById('maghribIqama').value || null
+                    },
+                    {
+                        name: "Isha",
+                        nameAr: "العشاء",
+                        apt: aptData.timings.Isha,
+                        adhan: document.getElementById('ishaAdhan').value || null,
+                        iqama: document.getElementById('ishaIqama').value || null
+                    }
+                ]
+            };
+            
+            const json = JSON.stringify(data, null, 2);
+            const output = document.getElementById('output');
+            output.textContent = json;
+            output.style.display = 'block';
+            
+            // Auto-copy to clipboard
+            navigator.clipboard.writeText(json).then(() => {
+                alert('✅ JSON copied to clipboard!\n\nNow paste it into prayer-times/' + dateInput + '.json in your GitHub repo');
+            });
+        }
+    </script>
+</body>
+</html>
