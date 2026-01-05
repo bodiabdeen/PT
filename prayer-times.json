@@ -1,1 +1,36 @@
 
+{
+  "lastUpdated": "2026-01-05T00:00:00Z",
+  "prayers": [
+    {
+      "name": "Fajr",
+      "nameAr": "الفجر",
+      "adhan": "06:21",
+      "iqama": "07:00"
+    },
+    {
+      "name": "Dhuhr",
+      "nameAr": "الظهر",
+      "adhan": "12:30",
+      "iqama": "12:45"
+    },
+    {
+      "name": "Asr",
+      "nameAr": "العصر",
+      "adhan": "14:30",
+      "iqama": "14:45"
+    },
+    {
+      "name": "Maghrib",
+      "nameAr": "المغرب",
+      "adhan": "16:08",
+      "iqama": "16:13"
+    },
+    {
+      "name": "Isha",
+      "nameAr": "العشاء",
+      "adhan": "17:50",
+      "iqama": "18:00"
+    }
+  ]
+}
