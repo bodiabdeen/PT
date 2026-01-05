@@ -575,11 +575,16 @@
                     `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
                     {
                         headers: {
-                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Authorization': `Bearer ${GITHUB_TOKEN}`,
                             'Accept': 'application/vnd.github.v3+json'
                         }
                     }
                 );
+                
+                if (!getResponse.ok) {
+                    const errorData = await getResponse.json();
+                    throw new Error(`GitHub API Error: ${errorData.message || getResponse.statusText}`);
+                }
                 
                 const currentFile = await getResponse.json();
                 
@@ -591,7 +596,7 @@
                     {
                         method: 'PUT',
                         headers: {
-                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Authorization': `Bearer ${GITHUB_TOKEN}`,
                             'Accept': 'application/vnd.github.v3+json',
                             'Content-Type': 'application/json'
                         },
@@ -614,12 +619,21 @@
                         statusDiv.classList.remove('show');
                     }, 5000);
                 } else {
-                    throw new Error('Failed to publish');
+                    const errorData = await updateResponse.json();
+                    throw new Error(`Update failed: ${errorData.message || updateResponse.statusText}`);
                 }
                 
             } catch (error) {
                 console.error('Error:', error);
-                statusDiv.textContent = 'Error publishing. Please check console and try again.';
+                console.error('Error details:', error.message);
+                
+                // Try to get more error details
+                if (error.response) {
+                    const errorText = await error.response.text();
+                    console.error('Response error:', errorText);
+                }
+                
+                statusDiv.textContent = `Error: ${error.message}. Check browser console (F12) for details.`;
                 statusDiv.className = 'status error show';
             }
         }
