@@ -205,12 +205,6 @@
             box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
-        .input-group input:disabled {
-            background: #f0f0f0;
-            color: #999;
-            cursor: not-allowed;
-        }
-
         .actions {
             display: flex;
             gap: 15px;
@@ -319,7 +313,7 @@
 <body>
     <!-- Login Screen -->
     <div class="login-container" id="loginScreen">
-        <img src="data:image/png;base64,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" 
+        <img src="data:image/png;base64,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" 
              alt="IOM Prayer Times" 
              class="login-icon">
         <h1>Admin Panel</h1>
@@ -327,7 +321,7 @@
         <input type="password" 
                class="pin-input" 
                id="pinInput" 
-               placeholder="â€¢â€¢â€¢â€¢â€¢â€¢" 
+               placeholder="******" 
                maxlength="6"
                autocomplete="off">
         <button class="login-btn" onclick="checkPin()">Enter</button>
@@ -360,24 +354,6 @@
                 <div class="input-group">
                     <label>Iqama Time</label>
                     <input type="time" id="fajr-iqama" value="07:00">
-                </div>
-            </div>
-        </div>
-
-        <!-- Sunrise -->
-        <div class="prayer-section">
-            <div class="prayer-header">
-                <span class="prayer-name">Sunrise</span>
-                <span class="prayer-name-ar">الشروق</span>
-            </div>
-            <div class="time-inputs">
-                <div class="input-group">
-                    <label>Adhan Time</label>
-                    <input type="time" id="sunrise-adhan" value="08:37" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Iqama Time</label>
-                    <input type="time" id="sunrise-iqama" disabled>
                 </div>
             </div>
         </div>
@@ -456,7 +432,7 @@
 
         <div class="actions">
             <button class="btn btn-secondary" onclick="resetTimes()">Reset</button>
-            <button class="btn btn-primary" onclick="saveAndPublish()">💾 Save & Publish to GitHub</button>
+            <button class="btn btn-primary" onclick="saveAndPublish()">Save & Publish to GitHub</button>
         </div>
 
         <div class="status" id="status"></div>
@@ -511,10 +487,10 @@
                     const adhanInput = document.getElementById(`${name}-adhan`);
                     const iqamaInput = document.getElementById(`${name}-iqama`);
                     
-                    if (adhanInput && !adhanInput.disabled) {
+                    if (adhanInput) {
                         adhanInput.value = prayer.adhan || '';
                     }
-                    if (iqamaInput && !iqamaInput.disabled) {
+                    if (iqamaInput) {
                         iqamaInput.value = prayer.iqama || '';
                     }
                 });
@@ -555,12 +531,6 @@
                         nameAr: "الفجر",
                         adhan: document.getElementById('fajr-adhan').value,
                         iqama: document.getElementById('fajr-iqama').value
-                    },
-                    {
-                        name: "Sunrise",
-                        nameAr: "الشروق",
-                        adhan: null,
-                        iqama: null
                     },
                     {
                         name: "Dhuhr",
@@ -634,7 +604,7 @@
                 );
                 
                 if (updateResponse.ok) {
-                    statusDiv.textContent = 'âœ… Successfully published! All apps will receive updates.';
+                    statusDiv.textContent = 'Success! Published to GitHub. All apps will receive updates.';
                     statusDiv.className = 'status success show';
                     
                     document.getElementById('lastUpdated').textContent = 
@@ -649,7 +619,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                statusDiv.textContent = 'âŒ Error publishing. Please check console and try again.';
+                statusDiv.textContent = 'Error publishing. Please check console and try again.';
                 statusDiv.className = 'status error show';
             }
         }
