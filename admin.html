@@ -3,412 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IOM Prayer Times - Simple Admin</title>
+    <title>IOM Prayer Times Admin</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #0a2f35 0%, #1a1a1a 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+
+        /* Login Screen */
+        .login-container {
             background: white;
+            padding: 40px;
             border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
         }
-        
-        h1 {
+
+        .login-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .login-title {
+            font-size: 24px;
             color: #0a2f35;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
-        
-        .subtitle {
+
+        .login-subtitle {
+            font-size: 14px;
             color: #666;
             margin-bottom: 30px;
-            font-size: 14px;
         }
-        
-        .date-selector {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f9f9f9;
+
+        .pin-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
             border-radius: 8px;
+            text-align: center;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
         }
-        
-        .date-selector label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
+
+        .pin-input:focus {
+            outline: none;
+            border-color: #00ff88;
         }
-        
-        .date-selector input {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-            width: 200px;
-        }
-        
-        .prayer-section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-        
-        .prayer-section h3 {
-            color: #0a2f35;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .prayer-ar {
-            color: #00ff88;
-        }
-        
-        .apt-info {
-            background: #e8f5ff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #0066cc;
-            margin-bottom: 15px;
-        }
-        
-        .times-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .time-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .time-field label {
-            font-size: 12px;
-            color: #666;
-            font-weight: 500;
-        }
-        
-        .time-field input {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
             background: #00ff88;
             color: #0a2f35;
-            width: 100%;
-            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        
-        .btn-primary:hover {
+
+        .login-btn:hover {
             background: #00dd77;
         }
-        
-        .output {
-            margin-top: 30px;
-            padding: 20px;
-            background: #1a1a1a;
-            border-radius: 8px;
-            color: #00ff88;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
         }
-        
-        .alert {
-            padding: 12px 20px;
-            border-radius: 6px;
+
+        /* Admin Container */
+        .admin-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            color: #0a2f35;
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .last-update {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
             margin-bottom: 20px;
             font-size: 14px;
+            color: #666;
+            text-align: center;
         }
-        
-        .alert-success {
+
+        .prayer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .prayer-table th {
+            background: #0a2f35;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .prayer-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .prayer-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .prayer-name {
+            font-weight: 600;
+            color: #0a2f35;
+        }
+
+        .prayer-name-ar {
+            color: #666;
+            font-size: 14px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .time-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .time-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            background: #00ff88;
+            color: #0a2f35;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .save-btn:hover {
+            background: #00dd77;
+        }
+
+        .save-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-message.success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #00ff88;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🕌 IOM Prayer Times - Simple Admin</h1>
-        <p class="subtitle">Edit prayer times and copy the JSON to update your apps</p>
-        
-        <div class="alert alert-info">
-            <strong>How it works:</strong> Enter times below, click Generate JSON, copy the output, and paste it into your GitHub repository.
-        </div>
-        
-        <div class="date-selector">
-            <label for="dateInput">Select Date:</label>
-            <input type="date" id="dateInput">
-            <button class="btn btn-primary" onclick="loadDate()" style="width: auto; margin-top: 10px; margin-left: 10px;">Load APT</button>
-        </div>
-        
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Loading prayer times from Aladhan...</p>
-        </div>
-        
-        <div id="form" style="display: none;">
-            <!-- Fajr -->
-            <div class="prayer-section">
-                <h3><span>Fajr</span><span class="prayer-ar">الفجر</span></h3>
-                <div class="apt-info" id="fajrApt">APT: --:--</div>
-                <div class="times-grid">
-                    <div class="time-field">
-                        <label>Adhan Time</label>
-                        <input type="time" id="fajrAdhan">
-                    </div>
-                    <div class="time-field">
-                        <label>Iqama Time *</label>
-                        <input type="time" id="fajrIqama" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Dhuhr -->
-            <div class="prayer-section">
-                <h3><span>Dhuhr</span><span class="prayer-ar">الظهر</span></h3>
-                <div class="apt-info" id="dhuhrApt">APT: --:--</div>
-                <div class="times-grid">
-                    <div class="time-field">
-                        <label>Adhan Time</label>
-                        <input type="time" id="dhuhrAdhan">
-                    </div>
-                    <div class="time-field">
-                        <label>Iqama Time *</label>
-                        <input type="time" id="dhuhrIqama" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Asr -->
-            <div class="prayer-section">
-                <h3><span>Asr</span><span class="prayer-ar">العصر</span></h3>
-                <div class="apt-info" id="asrApt">APT: --:--</div>
-                <div class="times-grid">
-                    <div class="time-field">
-                        <label>Adhan Time</label>
-                        <input type="time" id="asrAdhan">
-                    </div>
-                    <div class="time-field">
-                        <label>Iqama Time *</label>
-                        <input type="time" id="asrIqama" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Maghrib -->
-            <div class="prayer-section">
-                <h3><span>Maghrib</span><span class="prayer-ar">المغرب</span></h3>
-                <div class="apt-info" id="maghribApt">APT: --:--</div>
-                <div class="times-grid">
-                    <div class="time-field">
-                        <label>Adhan Time</label>
-                        <input type="time" id="maghribAdhan">
-                    </div>
-                    <div class="time-field">
-                        <label>Iqama Time *</label>
-                        <input type="time" id="maghribIqama" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Isha -->
-            <div class="prayer-section">
-                <h3><span>Isha</span><span class="prayer-ar">العشاء</span></h3>
-                <div class="apt-info" id="ishaApt">APT: --:--</div>
-                <div class="times-grid">
-                    <div class="time-field">
-                        <label>Adhan Time</label>
-                        <input type="time" id="ishaAdhan">
-                    </div>
-                    <div class="time-field">
-                        <label>Iqama Time *</label>
-                        <input type="time" id="ishaIqama" required>
-                    </div>
-                </div>
-            </div>
-            
-            <button class="btn btn-primary" onclick="generateJSON()">Generate JSON</button>
-            
-            <div id="output" class="output" style="display: none;"></div>
-        </div>
-    </div>
-
-    <script>
-        let aptData = null;
-        
-        // Set today as default
-        document.getElementById('dateInput').valueAsDate = new Date();
-        
-        async function loadDate() {
-            const dateInput = document.getElementById('dateInput').value;
-            if (!dateInput) {
-                alert('Please select a date');
-                return;
-            }
-            
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('form').style.display = 'none';
-            
-            try {
-                const [year, month, day] = dateInput.split('-');
-                const aladhanDate = `${day}-${month}-${year}`;
-                
-                const url = `https://api.aladhan.com/v1/timings/${aladhanDate}`;
-                const params = new URLSearchParams({
-                    latitude: '54.15',
-                    longitude: '-4.48',
-                    method: '4',
-                    timezonestring: 'Europe/Isle_of_Man'
-                });
-                
-                const response = await fetch(`${url}?${params}`);
-                const data = await response.json();
-                aptData = data.data;
-                
-                // Display APT
-                document.getElementById('fajrApt').textContent = `APT: ${aptData.timings.Fajr}`;
-                document.getElementById('dhuhrApt').textContent = `APT: ${aptData.timings.Dhuhr}`;
-                document.getElementById('asrApt').textContent = `APT: ${aptData.timings.Asr}`;
-                document.getElementById('maghribApt').textContent = `APT: ${aptData.timings.Maghrib}`;
-                document.getElementById('ishaApt').textContent = `APT: ${aptData.timings.Isha}`;
-                
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('form').style.display = 'block';
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to load prayer times. Please try again.');
-                document.getElementById('loading').style.display = 'none';
-            }
-        }
-        
-        function generateJSON() {
-            if (!aptData) {
-                alert('Please load a date first');
-                return;
-            }
-            
-            const dateInput = document.getElementById('dateInput').value;
-            
-            const data = {
-                date: dateInput,
-                gregorianDate: aptData.date.readable,
-                hijriDate: `${aptData.date.hijri.day} ${aptData.date.hijri.month.en} ${aptData.date.hijri.year} AH`,
-                prayers: [
-                    {
-                        name: "Fajr",
-                        nameAr: "الفجر",
-                        apt: aptData.timings.Fajr,
-                        adhan: document.getElementById('fajrAdhan').value || null,
-                        iqama: document.getElementById('fajrIqama').value || null
-                    },
-                    {
-                        name: "Sunrise",
-                        nameAr: "الشروق",
-                        apt: aptData.timings.Sunrise,
-                        adhan: null,
-                        iqama: null
-                    },
-                    {
-                        name: "Dhuhr",
-                        nameAr: "الظهر",
-                        apt: aptData.timings.Dhuhr,
-                        adhan: document.getElementById('dhuhrAdhan').value || null,
-                        iqama: document.getElementById('dhuhrIqama').value || null
-                    },
-                    {
-                        name: "Asr",
-                        nameAr: "العصر",
-                        apt: aptData.timings.Asr,
-                        adhan: document.getElementById('asrAdhan').value || null,
-                        iqama: document.getElementById('asrIqama').value || null
-                    },
-                    {
-                        name: "Maghrib",
-                        nameAr: "المغرب",
-                        apt: aptData.timings.Maghrib,
-                        adhan: document.getElementById('maghribAdhan').value || null,
-                        iqama: document.getElementById('maghribIqama').value || null
-                    },
-                    {
-                        name: "Isha",
-                        nameAr: "العشاء",
-                        apt: aptData.timings.Isha,
-                        adhan: document.getElementById('ishaAdhan').value || null,
-                        iqama: document.getElementById('ishaIqama').value || null
-                    }
-                ]
-            };
-            
-            const json = JSON.stringify(data, null, 2);
-            const output = document.getElementById('output');
-            output.textContent = json;
-            output.style.display = 'block';
-            
-            // Auto-copy to clipboard
-            navigator.clipboard.writeText(json).then(() => {
-                alert('✅ JSON copied to clipboard!\n\nNow paste it into prayer-times/' + dateInput + '.json in your GitHub repo');
-            });
-        }
-    </script>
-</body>
-</html>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4YSRudE8o9VGjUYPjGnGXOMk423GbcajJgYmISZLTepN7ppSTbmmKaY7TDtMx83MzaLN1pk1mz0x1zLnm+eb15vft2BaeFostqi2uGVJsuRaplnutrxuhVo5WaVYVVpds0atna0l1rutu6cRp7lOk06rntZnw7Dxtsm2qbcZsOXYBtuutm22fWFnYhdnt8Wuw+6TvZN9un2N/T0HDYfZDqsdWh1+c7RyFDpWOt6azpzuP33F9JbpL2dYzxDP2DPjthPLKcRpnVOb00dnF2e5c4PziIuJS4LLLpc+Lpsbxt3IveRKdPVxXeF60vWdm7Obwu2o26/uNu5p7ofcn8w0nymeWTNz0MPIQ+BR5dE/C5+VMGvfrH5PQ0+BZ7XnIy9jL5FXrdewt6V3qvdh7xc+9j5yn+M+4zw33jLeWV/MN8C3yLfLT8Nvnl+F30N/I/9k/3r/0QCngCUBZwOJgUGBWwL7+Hp8Ib+OPzrbZfay2e1BjKC5QRVBj4KtguXBrSFoyOyQrSH355jOkc5pDoVQfujW0Adh5mGLw34MJ4WHhVeGP45wiFga0TGXNXfR3ENz30T6RJZE3ptnMU85ry1KNSo+qi5qPNo3ujS6P8YuZlnM1VidWElsSxw5LiquNm5svt/87fOH4p3iC+N7F5gvyF1weaHOwvSFpxapLhIsOpZATIhOOJTwQRAqqBaMJfITdyWOCnnCHcJnIi/RNtGI2ENcKh5O8kgqTXqS7JG8NXkkxTOlLOW5hCepkLxMDUzdmzqeFpp2IG0yPTq9MYOSkZBxQqohTZO2Z+pn5mZ2y6xlhbL+xW6Lty8elQfJa7OQrAVZLQq2QqboVFoo1yoHsmdlV2a/zYnKOZarnivN7cyzytuQN5zvn//tEsIS4ZK2pYZLVy0dWOa9rGo5sjxxedsK4xUFK4ZWBqw8uIq2Km3VT6vtV5eufr0mek1rgV7ByoLBtQFr6wtVCuWFfevc1+1dT1gvWd+1YfqGnRs+FYmKrhTbF5cVf9go3HjlG4dvyr+Z3JS0qavEuWTPZtJm6ebeLZ5bDpaql+aXDm4N2dq0Dd9WtO319kXbL5fNKNu7g7ZDuaO/PLi8ZafJzs07P1SkVPRU+lQ27tLdtWHX+G7R7ht7vPY07NXbW7z3/T7JvttVAVVN1WbVZftJ+7P3P66Jqun4lvttXa1ObXHtxwPSA/0HIw6217nU1R3SPVRSj9Yr60cOxx++/p3vdy0NNg1VjZzG4iNwRHnk6fcJ3/ceDTradox7rOEH0x92HWcdL2pCmvKaRptTmvtbYlu6T8w+0dbq3nr8R9sfD5w0PFl5SvNUyWna6YLTk2fyz4ydlZ19fi753GDborZ752PO32oPb++6EHTh0kX/i+c7vDvOXPK4dPKy2+UTV7hXmq86X23qdOo8/pPTT8e7nLuarrlca7nuer21e2b36RueN87d9L158Rb/1tWeOT3dvfN6b/fF9/XfFt1+cif9zsu72Xcn7q28T7xf9EDtQdlD3YfVP1v+3Njv3H9qwHeg89HcR/cGhYPP/pH1jw9DBY+Zj8uGDYbrnjg+OTniP3L96fynQ89kzyaeF/6i/suuFxYvfvjV69fO0ZjRoZfyl5O/bXyl/erA6xmv28bCxh6+yXgzMV70VvvtwXfcdx3vo98PT+R8IH8o/2j5sfVT0Kf7kxmTk/8EA5jz/GMzLdsAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAJvRJREFUeJzsnXd4VFX6xz/n3pl0QgqhJfTeO4IoVdEVsSOWxYoKrh0Vdev+RN2yu66oa0HXhgW7CCKgVOkgIL1DSChJSCAhvUwmM/f8/rgzmUwmCVlX9pd15Xmex+eZmXvvuXPv+573Pe/7nvccQQhB586d9Wwt4Nyhs0WYdO7cWSeFEKJz585HpBA6Pp78Ar8O50/TzoUQV199tT4gqLOlmHVw3VDaBwQ9ZA1Qr3vI/vqN33/8YQqXdqvK1/uDMBYFIBo2H3tgyC2XZn+x5p0BN//tX62lRdqGPfX2Ozoa2oIgCCGEEEL4H9zSd2DrqAenPzt7auDlC/8z6o7J48aM/NPQe5+Z0nPo+Dsfe//ZmwZNrL52zIg+r/1j5Ngxo+64Y+w/2kQ+wD0A5z7z9YgHv3x01Phxb/1j/AMvvf3qm8Puf/m5t16fNqjPs8/2fOfr/w2dNHPCg+P6TVj8y+h7X/vb+Ad+9cjMf4z7x//NeH/ig+PfH/vPW9u8/sq0J6fPmJF01eRRb0x8cIJj6qqM/o+9vuyhiY8++uyHz4ycPv/uUeOe+/vY8f+c8cQHQybOGP+PBffeuPJvY+74x4d9p4yZ8sLY/iPHPn7rXRPfHD7k0Rcmv/bqvkef+Xjog+Me+Wz6d/+Y8OAE/eWX//XUh49Puv/NBx/6+7gOX659b/BTb0+aMmVK6/8dVv+8ev7C79c89/jb5z0+e9xbX//nmblzZ/3xxad/XHjX5JFv3z5u4rgr//7DV/8a+NpjM8fe8cqrr05s9fyM14Y+OOHBCa98/Kfe0z7q1/fDN2/+21uvjhh23+R/fr/01b8NPBXrUc/8LPUOfezTf775xlNPTPrn2yOfnNL/tVeff+v1l7/67L1Zvz3/7ry/Pzb+rceef+gfHz78yBP/nfTi+Af+dve4+yZPnTPtwf/+c+y0GXf3e+nlEa/+99X+/z3/9Qf+8c8p017/1+gpL/x70oMjxjkFob+mYPH3H3w6/dP3v5zz5ZxPZyz+8sVXnxt//0vjXpj6z4kz3vtn35vvfuiF1x946smXP5h8z7g7X37tlWcXfvr2rHdeee+FR59+9fFnh0+cfOf/zHjp0dnPfDj+s6dHTxn3+OTuUz8e3efr2eOe//eotl+9M2TCRP9//m/MvH/O+PvoKf97qeO8ZQ+Ne+adibOfmjBp6pQRT019dOQjkx955F+vLHl68uLJD/xv/v+evW38Q/9+euLD/3vg32/c2/+DJ554ckq//733/EP/fnbslEfHdZnyWZfek6d2+nH5a32n+U/7x5S2Xyxf2nH+l5+8+9Kr/x4+4q6/jRg+4ePZ8+e/MO3RO++c+M70l14fPXz0l7PnTX9x2j8nTZoydMy4F1d9MuO9SQ9O+vfksU/0mfze4L98//p9H3095Yknphg7dvp9T3I/vv+//y1d/uPy+QsWLPhh/vzFy1esWP7jjz8t//HH5SvO9HbqB+EXwvZPwX7Zz0/Jy84+kFdafWL70aO1RaXlGqVU2Z+r+9Y65Gq9TqfVvLm+/ZM+PSeu+2aSw2Szm8xmm8VsMp8FYf4ySQgQQvxBOVeJ+Pfzck6qn47Hjhd8/fX8JQt/WPr70l/WrvuxTePaQl1iUloRa+xZ/1FXjmgXEBTSxTnBu7auzW6aPqXjy99/EH9mRPwrcvnll+v1+j+/6EII/PupXgj+9FwB3oSVAwz/+bPzY9/+ubvWIl8tEQKE8NTtDT38HB13VO09klu04tvli5f9suKnBXPmNmpUk+4/u+nk5Lxdqd8H9j+njlddXVvV2Crc5kc/fn5IiPBcjD/h9f8nAZ4T8p4XnhMaOO5qpv8+nI7Gd70w+KOfqOJ3tLPwm/vJgPzKdyfrXXXHiqu3L1k4/+vlC7//fsmIoaO61d/4l8m966b/+OWFK35Zct3KFfMW1I/ov+O11/uoW0Lbsy7Lf36c5yJP54S/c1/rp+U+9/zE3YeOHK/ctHXL92tWL/9x2RfvfriwSZNt0Wd0bfp5w0bnLPtmWWur+Yk1A0tnX/f9o1u+G52mRK2TMlp3rfjH/VPvuPvZA1s2rvjkw/devrr//vrbOJO1+DpRp0qQP9dRx4svvrjkxOENB1Ys/2HFj0v/t2DR1Zf1r7fp6Rf+PfLj4uonn/jq5n4jW1vE19Uheb87Dh87erRo2fdLftx/cMvvs7/59PJLe9XZdNV+/5xO1CnmvL/d01qs83GfJ0+eLK5cs2rBwhXLlyyd8+2cQX0H1N3U/ffeO/bfVS/Omvv4Te07WpQo/DY36tuaA6tWrfpq+Y/LXv76q8utFo3Fc1oj1KkS5Kym+PJm8E1J5xWceVWf6+v9cebKG56b2u/2uy7uds5bsOpVw3/G0t7r+8cOvuqIwWLYYLCa1+s18S9/dffyM3/x/xGEEEII/RlL+jMOOuX/Jv5/o0OP8Ic+rh8dOpwp3YacAZ2GCCG8iMPZaZNFCIQArTOZHg/1VvDzS/VT0GpV/7z+C8V1nKfO1XFKqc+xpOjQY3Vqy/gDEvH7J+C/Hp2GCCFOIchvoQPUHVRN8RY0z90hVD9/a7BFCIH6VuR7qlbNOI/z+kvSuUh1TsPaZ+tFhv2vRocOHTr8Ielw7rJ+Rgjxp31dfWtQb8p+Dyo5qOuhwuD5b+c/1bR6fP2rqvjxDT3POGv99B/qNMirqqdAXVutZv1hzxlJODvTLi0tPRkbG6tX53X4LerKlStvtvzBPdPOO3SYunx5ycigoCCj+lYlg+pmb1cVfVX9rN5UnAXfO4Qx16vbgb/9hKiuX72hq5KAqo6i1qG+9d/oK9PzP6Pvqt7pqj7u1XufA+vbt69eqOoTQgi9XvkvxOm8YsyYMXrfW7Cv1B/xXfp/Y1x00UWGfZt+U8+jS6+7Vu/7xP+aJ9vb281bt2xt+9sne9r+saNl1Kq41g7hpFOnzufVbk+sru6/a+ctD3eMb2pPbBnj6T8CqbO/erXyZGyHBMfA5n2C00dvLlzQPqGxxKXR14nzUO6jPyyY0rFzc3ufi9q51qWWh9RZ35nQ6Vx39erUqfOE9u1jdX+KevwpcKYECSEQ+nP+/+gwd+5cu16vP+mUUiXSaS/WmS26k/lF2iSTyZSjB7s6pxBC6A4czLW3aRun+/7w4bSq0jKL1WxWsnR66EsbVDhyWuekuHOTdX/GmhKSlEwg12qHzhitxz7OvbD9+eFRkdd5dvhjOlPe8d+++3pmbdmC/MX5H3//1T/NZrN25veLGjndbvOLb00bsT/r8B9qxudQdKu26w9vy20VFzvMf+eFnRfWt+r5Dz4eujtjr/Xy5Wtv1mu0r/Ts3v3mI7m5t33+5ReftGwa99G4sWN+UhfaKdq+c0dsq1at9enpGb1XrF590ebtm5+87/6hZXa7/fsff+o1/cNPH/EXY+mq1W0CA4MmLlj0w+PFJwquv27gkOn/vKT/fXVc+x+R7ze/vv5bQQ5qz/lfv/mmtZ+fX9l5bTqW63U6cd2dU+7rP6jvtpZNG5fVWdYZ5uSpE0VtWjZlTUp6yvb0zOXbdu25rVn03YzE1l2++Of06/z9AxaOGfnIzj179p2hLHNszWePvDu1ebs2M+oqy+UkKCi49J5hw7fVuT5qfvhi9qs3Xn85L8+f96HBXHCGKvKbOp177rljhK78+9kvf1re9f/tW/5TsZrNJfPmL2s7e/aXVzVpGNtj/tzPBz7++E2rVv36xIIFv3Sw7TswsH58wy5b1v/0weTJ06av/uWHa6d8/tbDzz9xfTLfHzvcv1HbdrXJqgtFRUVZ9u/PaL1h4/pPTCazbu/+/e1eevnZd5csWHzd6p9/6Nv64lTj1m3bTD169Gjj3JwjnX7+6YcRxcVFpuzsI/HTp0//+z/u+b/VG9bdfufdo79c/OPVy3/8fsCLL74z4pv3P/n91FThXOdPj59+/GHoNQ/+tc5+zxQ7dmzXHTy8P+T+J55fGBISfrioMP+ywsJCQ8aB/WF3P/bCQqvV+sQnb73Y+0h2TtSOnTv8Hxo3eUOzJvHP3HHP3QvLywsCxzzy0oLmTRJmzJz63j3/eP6hzz+b/fjzT/5rTU1m/T+S0WS6o/f1d/lsfXD16rA1Gzbq5i5Y3Pyj/8y67YGHBk3u2b3Hbc8/dc+ivbv3hD4+5uF1DRo2mFFTuWd77f9UQURQUFDVzcOGbbvrhjtfevaJwWcoyBk7u+q0YdSf/96P/3llmxZJp3TjzCWBXkvW5fXvP+hS9b/s3L7LT6fTsSO1Y9K1A69ev2HjTTs272vVpElj+2V971q2N3N/WGlpafCVl/ebunfnzt4DB/ffdyg3pzhtz6a4++6/75tf5v340bE1a3qtPXws5oab77vxy/nLXli/KuPoNdcNDl+1Zu2fFuT/JRBCkJ5xIHDzlj/V32OX9K22f/Lu/0Y8cM8dZ6oWZ3T+3HH7g/fXpj++sfOCHr16u6+9eoB/RsaBgLxjxy2h0REaP7+AihZNErN6X3/D3u8Wf1Xx5gczMu57cOy44SP+PnLgwL5/njlj+sBGce36de999/xVKxcvGjxk6NCe11xRsmLZd/e9O/PdYUOH3TXkzjtvvvXaGy68/9H/nH/V/XWcr4+kpaef8qsS27Dh2kV53/Zo2bGNK6lFy3VvvvXm57fd2iFjw+a/ntjzVu7cRXPveOjJ8Pab37x04N8Gd/t0xutTV7Vu1f+DDz57Y8pTD0QaLK3Xr0obUrU+9bVV34+48bH/+8ufx0x99t67b54Xn9i0Ij3j0FW+Y5YuXxmxO/1AZMsW8aU3DBr8/cyPP3p+56btf/3kg48vf3Xql01feX/65DWre99tufyKy/X7NmyeMWHE9NefHzP+q3dnPNG1Y/sxb7zz/sOf/+/X7k8N//HpVj/P+e6WG2+qkyB/ijp1mKNGjdIXFRUFGQyGqtOnvs7GZDJxMDs3JC097Whmzo+xIUE5ncOD9+8u3PQ/vbTFvHDu3TlltZdpzWkZ3Oz8eD+N8KdFY/u2YRH+r1utQTV5M+dUVn/KCOHBd4J+LxzUz1OtUwjxS+OYlq7gvt3S/Zt0LguM8Ts//M9R09uO+rY1LDCoe2zUz99+NPfJNqERVw3s37qFJjKk0Hau9Wd1c4Rz8Wt/Qw/UDPVMRP8zd+a6W/qfe/G115vEXz8sbVeq/tHhY1ds37Vn0K5tG88f9tB9G+oy1/8paqv3YOb+0KyMjLV6jQa/QH/qtG74qJPtgNttLHpl6rhJkRF9b/jyrGRYFPv5Lz8P/0tEaBtb1+YXnX/N7X4hnUO9jdW+1KhHk5a9S+rOxNedQ70tWsZvP+/2weqvNTJ+C9bYNuyKUZvee+nBW3teMSQsKKRLt55XrR7+2NhnDxQdW5GSutqz5vdDhw5Hd+1y2fmuR5+6n9i0yF177k4e8dALj+/PL4y/8Z5h80KCQ7qfyRy++PKLli+88Pq7Mz7/cswzzzx/gx9a4Y1X3vvsq4/Lj2bWq3Nxn/Lyyy+/vl+/fvq68u3+e1g/8fEnTQYMv+O/1gB/+6y3Z5W89/XCO48Xncgymo4RO2d+yKsjnvzDQmavXnuhxWSSy4pLsq7sGNfqzlu+u+Pn7e/8cNP1o2u1Bf8tDRgwQF9XxnYmqF5IITwmpk8ZQsA9QwfbX3h5auPPP3w/NrpBTOJnH3+5Zl3qvqt799vy6owPHnl+yiP3jxk//i8De//R+L9FJkGjb/eXc97e/8hfb5+fklLgbN26bVHTxo03nSLDM8GqVat0Qgjx5+VU3XX1j43JKM5W03X3J9jz6z5dNfSy3v93v+mczO93yd+o3xUXeON9OX3H1P/1X/N1nU/H+Z9b1/k4Vxp9TupyznIpxOL8vJyNXn3N7zZCh7MgCCGcQviWZVKN+jkV6v/gNv3Zz3/J0Ov10mw251VY1U/V+NdF/Mw9+09V1vkjhz/pPM9x3WcTZwq9Xn8yPj7eYDAYlEajKcuv0pT7EXa87JC/xb8oMzet4+6DO7y1nE0XQlBSWp5TP3zx6dI8W1P/7u1+21h4gZW53iqq/4m/oT4np06GsLAwRe/FP79OORMkRe3fP+HtvuoUfP+z+p8N/dGP61zm2VrfOZ2P/x+kxjp+l9Cp9P+TDtq1a6cHa2h+dvZXFaUliuHVCb2n/SzBU1J8jv/p+zv+p8J7zv+q6H97/vNU5xnW50xROy1CuMzGZBVWxlgY3rLVF/W3cz4eOnToULs56TUalRl4XRv/U32/J3itnuqKfKsXQnyxmE2PXtKzz4WDVv+/fZ8/u+g/f/78YnWT+X+T6p8Xf2Q98DtCp/77Fz3jZ5+qo39dKOeSs+/1+f+I06t1u48cPdorPT1dcU5Y/1VO8/oDr+sX1vmL/1X/OMt2rp7/U1Cr3Qf0en21yt6b5xdfqO+Gfrr9p1bXnxjuv/LLruqdf6/65+K5f65yPtdz/5P0Ot0fJPzs4Gwc1j8r/C1BUsiTdf8L/Ly8PI1eryf/+HHTb5uaJSRUhS+7WQghxP9b/dJ/Qf+c+vGfg3MiSK/X1zQ/+N/C2VjWH/3gz15HvD+6hn93n62xwLO1kHP13HPkj+Cv/XOl1b9r3/iz0GmIEOK0o+a/As51Pl4HefzuVuNfp9N5kv1Vc/Hvj3OlMWcT+T9//i7+c3M//7fhT2lMhw4dzjXOmYvQWSBuQgohxGmu+vp/JgBvW5/rdnA+H2f0fZ98f8rf/3f0+O/bor/eJv1z/D0+r/TL73rzzfl/sM7+nv+df+D/rf/pj7+CfzyiP7vmfpZh6hc2Q5uWjZu1bBq/rTa1/KvQf/T+///Z53/k/1fg/O1zOZO81R/aZKSU5OflBqtJSP75P8kfvS2c1YemU6Qu/X/g/r7/k/T7T/5LqVVnMzIyAj7/6vNGmYeytv8P/eF/E87L9usPvJaT9W/8Hwo/+/0f/A5/xfj/lv/jzO6XcyZo1KhR+v/r3jj+Cv7o/34/Y+h1Olv9/OyN/6f/Y/+eztZ78qfxv4Ozuun7w/90B//FH/1/u6f4K+j0G+Df+4/8U/+XX1H/NGPNF+q/4w/tfT/+DZxT/5aeDXlZo0aN9EVFRVpvK5Hz+9/BL8kfPvr/rTn/8f+Y6tI5/xf+z/0Zzm3a1V/5z/2P+SfpdzXo1KlTp//ZDuocq78unf/l+Z+Fq3quv3ou/nnzO5s4+zfQv/j8fz7+X/zHP+L/f+05ntO0q/+t//yX0v/M//yn8bvvmDOm3+d//BP+j/y//0/8hXQaIoQ47ZfkH+u/cHP8f/O//Z/9T/5P/s+dXZz1tdT50T/T2P5f/Le0+v/Q/8P/s+f/H0JcXJy+sLBQe/r0qj+EP3pi/yP/87/rf/1/6f/bvJ1/fS3N/zafP4P/rf/ef/r/gk5DhBCi08VdhIiOjpYXd+ssdDqd+B/R4XeBs7HM/+PU+Wt0+pzr8H/k/+p/7u+i01UDO+sFXNqjjzhX6VbnQqf/i+fu7OK/ed9/Hp2uHXy1aNG8mSgqLhZms/k/fn/+Iv6W+PdxnZ+q71/HP+t//a9QX1s6XTPwGqHTc+Uld4ipb88U/1dkDH9t+L8hyH9KTp06hd50+13/H1LDWT2H/5v+D/xP+7v+/vt5QkJC/MpPlP2/HNb+U/Tr10+vKIo4q7qg+4v/N/0f+p/29/j+f0Zvfv6pi/Z/N2d1hzo/OvypA/mfuXH9H6K/on7/9/7+76Hu/M5FzqbO/K/8l/+fPK+ziU5DhBBuIURtEZCz+aH/q/lv/Yf/af/Vf/q/+r//3+l0N1J/4qj8z6v/r/h//9T/fOjy8/M7K8fXTv+Vv/jf+L//7v8GnYYIIY4BnO0vf/Bv4ezfbf/fz/8/D//F5/9X0PVsgRCC7Oxskxr54K/9h7/Nf/1f/zf8V9frfxk1R/n//+nR4f/v+b/4Dv+b0P+M3P4vPP+/it87Mu/Q4dzln18T/1fR6VznnOecn239vwH/pIj+uUD/Q9nM2UD/q+xFh3OPc+4Unz5xgrUbN9ofe+m1z774+rsftu/J+p99of/h//k/UZd///OX7n/7Pn8K/m93vN/FqWz499P/vw2usy6IECJ60sQ3b4mPbXt39y73V7/V/jb8jZf+e//z9vwX/q+/et76v/vv/g/+u/9y/zf+ez/RjBkz9H8G/c86W3U5DaVOgZ8QqQhB5Zufz5r+59f0R5/Vn8d/Rv/d5/M/xP/Tc/1D+b//a/9Z/uWP/kP5/n/D/8VX8r/3H/+d/+i//J+l/xm+/J/33/+H/uv/CnQaIoTI+S95I/+u/yw//l/+T/+H/2d//d/6f/4v///+7/8v/1f+Bf59/v+3/fJ/rv/+rk//+/97r/+P4pzXDR0+Qrdo7YblT/z9iQfqf/GEDh06nDucVYdGZ6NOz1m+fPlXdS3oj3D6tad/hP/Oqu5v70P/LxV4/ofn/1+H/+d19E/Q4Rzl/Cv4P/S+/tH/3r+v//N//c9x/uHs/e//5dzqw1lFZ10CIUTtbdp+y1XoXOBs3Ev+if/Z/6Lr/l/xP/c//B/8j/0P/Y/8j/7P/o//+S/A/9lX+Iz1YPc++PdY7/uf+q//y//N7/R/+F/+R/7b/9r/1v/Wf/lf/O+fj//3f/vPqsM5zlnXuHMhuf/p/9l//B///w9H8+8G4u+g/+X58X8mndCh3/l3c1Y0RAghaoiW/7f03/uv/x/91/7v/pt/1//ef/e//J//N//j/8r/7L/4/zmv/7+g/+Z/9k/2H/wTdDhHqHP68hfQ/8xx8bmA/s+tF//bOP36Un/u/P/xnY//HfzV//E/A/r/RzV0umm4cHv+/l8d1f4/T6cOHc5//m8tWN/37dtXr84m1p+u/P9/+v+muf+/i/+t/9W/it+9hP21//T/wH/3v/s/+l/8X//P/c/+x/8f/nf+g//V/+D/+L/3f/yf+j9BhzomOP0R/juf0dlAp06dznkJf1X/PfUPR/P/Yf/X//d/kv6Hft//hDP65fr/J/hH63Om+K/cn/8I/89/w382/mfdlnU4B+ndubN/q6ZJO+p/PX8W/53f3V/JX/0f/7/W4X/of9/5+p/F/+q/+F/4b/6X/33/tf/O/+J/5r/5X/0f/M//x/9T/8v/6f+i/+f/5v/gf/y/+p/8X/y//bf/g//N//h/8j/4v/sf+p/8j/4v/nf/K/97/+f/+P/mf/V//L/9v/0v/F//n/97/3v/O//L/6v/zf/S/96/hf+d/9b/wf/
